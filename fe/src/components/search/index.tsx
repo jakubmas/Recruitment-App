@@ -1,20 +1,30 @@
 import { useFilterContext } from '../../contexts/filters';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 export const Search = () => {
-  const { query, setQuery } = useFilterContext();
+  const { setQuery } = useFilterContext();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  useEffect(() => {
+    // Set a timeout to delay the query update
+    const delayDebounceFn = setTimeout(() => {
+      setQuery(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, setQuery]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setQuery(value);
+    setSearchTerm(event.target.value);
   };
 
   return (
     <input
-      placeholder={'Search'}
-      value={query}
+      type="text"
+      placeholder="Search"
+      value={searchTerm}
       onChange={handleChange}
-      className={'text-sm font-normal px-3 py-2 bg-white w-full'}
+      className="text-sm font-normal px-3 py-2 bg-white w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
     />
   );
 };

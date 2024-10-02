@@ -26,6 +26,9 @@ export const ProductCard = (props: IProduct) => {
     isInCart ? removeFromCart(props) : addToCart(props);
   };
 
+  const validFromDate = new Date(validFrom);
+  const validToDate = new Date(validTo);
+
   return (
     <div className="flex flex-col bg-white rounded-2xl p-6">
       <div className={'flex justify-center mb-4'}>
@@ -46,16 +49,13 @@ export const ProductCard = (props: IProduct) => {
         <EnergyBadge energyClass={energyClass} />
       </div>
       <p className="text-xs text-gray-500">
-        Cena obowiązuje od {validFrom.toLocaleDateString()} do {validTo.toLocaleDateString()}
+        Cena obowiązuje od {validFromDate.toLocaleDateString()} do{' '}
+        {validToDate.toLocaleDateString()}
       </p>
       <div className="mb-3 flex items-center gap-x-1">
-        <h5 className="text-4xl text-black font-bold">{parseCurrency(value).unit}</h5>
-        <div className="text-right">
-          <div className="text-sm leading-4 text-black font-bold">
-            {parseCurrency(value).decimal}
-          </div>
-          <div className="text-sm leading-4 text-black font-bold">{currency}</div>
-        </div>
+        <h5 className="text-4xl text-black font-bold">
+          {parseCurrency(value).unit}.{parseCurrency(value).decimal} {currency}
+        </h5>
       </div>
       <p className="text-base text-gray-700 font-bold mb-4">
         {installment.value} {currency} x {installment.period} rat
