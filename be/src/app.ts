@@ -2,13 +2,16 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import productRoutes from './routes/productRoutes';
 import errorHandler from './middleware/errorHandler';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app: Application = express();
 
 // Middleware
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: `http://localhost:${process.env.FE}`,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }),
