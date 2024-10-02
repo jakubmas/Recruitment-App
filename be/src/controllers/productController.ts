@@ -1,11 +1,26 @@
 import { Request, Response, NextFunction } from 'express';
-import Product from '../models/Product';
+import { Document, FilterQuery, SortOrder } from 'mongoose';
+import Product, { IProduct } from '../models/Product';
+
+// Define an interface for the expected query parameters
+interface ProductQueryParams {
+  code?: string;
+  energyClass?: string;
+  capacity?: string;
+  features?: string;
+  sortBy?: string;
+  order?: string;
+  page?: string;
+  limit?: string;
+}
+
+interface ProductDocument extends IProduct, Document {}
 
 // @desc    Get all products with filtering and sorting
 // @route   GET /api/products
 // @access  Public
 export const getProducts = async (
-  req: Request,
+  req: Request<{}, {}, {}, ProductQueryParams>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
@@ -21,7 +36,7 @@ export const getProducts = async (
       limit = '10', // Pagination: items per page
     } = req.query;
 
-    const query: any = {};
+    const query: FilterQuery<ProductDocument> = {};
 
     // Helper Function to Escape Regex Special Characters
     const escapeRegex = (str: string): string => {
@@ -29,16 +44,12 @@ export const getProducts = async (
     };
 
     // Filter by Product Code (Regex, case-insensitive)
-    if (code && typeof code === 'string' && code.trim() !== '') {
+    if (code && code.trim() !== '') {
       query.code = { $regex: escapeRegex(code.trim()), $options: 'i' };
     }
 
     // Filter by Multiple Energy Classes (eg. A,C)
-    if (
-      energyClass &&
-      typeof energyClass === 'string' &&
-      energyClass.trim() !== ''
-    ) {
+    if (energyClass && energyClass.trim() !== '') {
       const classes = energyClass
         .split(',')
         .map((cls) => cls.trim().toUpperCase());
@@ -46,7 +57,7 @@ export const getProducts = async (
     }
 
     // Filter by Multiple Capacities (eg. 9,10.5)
-    if (capacity && typeof capacity === 'string' && capacity.trim() !== '') {
+    if (capacity && capacity.trim() !== '') {
       const capacities = capacity
         .split(',')
         .map((cap) => parseFloat(cap.trim()))
@@ -57,7 +68,7 @@ export const getProducts = async (
     }
 
     // Filter by Multiple Features
-    if (features && typeof features === 'string' && features.trim() !== '') {
+    if (features && features.trim() !== '') {
       const featureList = features.split(',').map((ftr) => ftr.trim());
 
       if (featureList.length > 0) {
@@ -71,8 +82,8 @@ export const getProducts = async (
     }
 
     // Sorting
-    let sortCriteria: any = {};
-    if (sortBy && typeof sortBy === 'string' && sortBy.trim() !== '') {
+    let sortCriteria: Record<string, SortOrder> = {};
+    if (sortBy && sortBy.trim() !== '') {
       const sortFields = sortBy.split(',').map((field) => field.trim());
       const sortOrders = (order as string)
         .split(',')
@@ -87,8 +98,8 @@ export const getProducts = async (
     }
 
     // Pagination
-    const pageNumber = parseInt(page as string, 10) || 1;
-    const pageSize = parseInt(limit as string, 10) || 10;
+    const pageNumber = parseInt(page, 10) || 1;
+    const pageSize = parseInt(limit, 10) || 10;
     const skip = (pageNumber - 1) * pageSize;
 
     const total = await Product.countDocuments(query);
