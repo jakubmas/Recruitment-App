@@ -26,14 +26,14 @@ export const getProducts = async (
 ): Promise<void> => {
   try {
     const {
-      code, // Filter by product code (regex, case-insensitive)
-      energyClass, // Filter by one or multiple energy classes (A,C)
-      capacity, // Filter by one or multiple capacities (9,10.5)
-      features, // Filter by multiple features (all must be present)
-      sortBy, // Sort by price, capacity
-      order = 'asc', // Order: asc or desc
-      page = '1', // Pagination: page number
-      limit = '10', // Pagination: items per page
+      code,
+      energyClass,
+      capacity,
+      features,
+      sortBy,
+      order = 'asc',
+      page = '1',
+      limit = '10',
     } = req.query;
 
     const query: FilterQuery<ProductDocument> = {};
