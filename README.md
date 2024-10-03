@@ -15,21 +15,25 @@
    npm run dev:setup
    ```
 
-3. **Start the backend server**:
+3. **Setup and seed DB**:
+
+   You can find information on how to do it in the be/README.md file.
+
+4. **Start the backend server**:
 
    ```bash
    cd be
    npm run dev
    ```
 
-4. **Start the frontend server**:
+5. **Start the frontend server**:
 
    ```bash
    cd ../fe
    npm run dev
    ```
 
-5. **Open the application in your browser**:
+6. **Open the application in your browser**:
 
    Navigate to [http://localhost:5173](http://localhost:5173)
 
