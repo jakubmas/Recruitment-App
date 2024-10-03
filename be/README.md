@@ -15,6 +15,8 @@ A simple API to retrieve and manage products with flexible filtering, sorting, a
 - **TypeScript:** Enhanced type safety and code quality.
 - **MongoDB & Mongoose:** Database and ODM for data modeling.
 - **Postman:** API testing.
+- **Jest & Supertest:** Automated testing framework and HTTP assertions.
+- **MongoDB Memory Server:** In-memory MongoDB instance for testing.
 - **dotenv:** Environment variable management.
 
 ## Getting Started
@@ -33,27 +35,28 @@ A simple API to retrieve and manage products with flexible filtering, sorting, a
    ```
 
 2. **Install dependencies:**
-   Navigate to be directory and do:
+   Navigate to the `be` directory and run:
 
    ```bash
+   cd be
    npm install
    ```
 
 3. **Set up environment variables:**
 
-   - Create a `.env` file in the root directory of be directory.
+   - Create a `.env` file in the root directory of the `be` directory.
    - Add the following:
 
    ```makefile
    PORT=5001
-   MONGODB_URI=your_mongodb_connection_string
+   MONGO_URI=your_mongodb_connection_string
    ```
 
 4. **Seeding the Database:**
    - Run the seed script to populate the database with mock data:
-   ```bash
-   npm run seed
-   ```
+     ```bash
+     npm run seed
+     ```
 
 ### Running the Server
 
@@ -144,7 +147,40 @@ http://localhost:5001/api/products
 
 ## Testing
 
-We use **Postman** for testing our API. Here are some key test cases:
+We use **Jest** and **Supertest** for automated testing of our API endpoints.
+
+### Running Tests
+
+To run the tests, navigate to the `be` directory and execute:
+
+```bash
+npm test
+```
+
+### Testing Setup
+
+- **In-Memory MongoDB:** Tests are run against an in-memory MongoDB instance using **mongodb-memory-server**. This ensures that tests are isolated and do not affect development or production databases.
+- **Test Files:** All test files are located in the `tests` directory at the root level of the project.
+- **Test Coverage:** Tests cover various aspects of the API, including filtering, sorting, pagination, and error handling.
+
+### Sample Test Cases
+
+1. **Retrieve All Products:**
+   - Ensure that the API returns all products when no filters are applied.
+2. **Filter by Energy Class:**
+   - Verify that filtering by `energyClass` returns the correct products.
+3. **Filter by Capacity:**
+   - Check that filtering by `capacity` returns products with the specified capacities.
+4. **Filter by Features:**
+   - Confirm that filtering by `features` returns products that have all the specified features.
+5. **Sorting:**
+   - Test sorting by `price.value` and `capacity` in both ascending and descending order.
+6. **Invalid Query Parameters:**
+   - Verify that the API handles invalid query parameters gracefully.
+
+### Testing with Postman
+
+We use **Postman** for testing our API manually. Here are some key test cases:
 
 1. **Basic Retrieval:** Fetch all products without any filters.
 2. **Filtering:** Test each filter individually and in combination.
