@@ -6,7 +6,6 @@ export const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
-    // Set a timeout to delay the query update
     const delayDebounceFn = setTimeout(() => {
       setQuery(searchTerm);
     }, 500);
@@ -21,7 +20,7 @@ export const Search = () => {
   return (
     <input
       type="text"
-      placeholder="Search"
+      placeholder="Wpisz kod produktu"
       value={searchTerm}
       onChange={handleChange}
       className="text-sm font-normal px-3 py-2 bg-white w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"

@@ -3,7 +3,6 @@ import { fetchProducts } from '../../services/api';
 import { ProductCard } from '../cards/Product';
 import { Button } from '../button';
 import { useFilterContext } from '../../contexts/filters';
-import { ChevronDown } from 'react-feather';
 import { IProduct } from '../../interfaces/product';
 
 export const Products = () => {
@@ -21,9 +20,9 @@ export const Products = () => {
       try {
         const params = {
           code: query || undefined,
-          energyClass: filters.energyClass || undefined,
-          capacity: filters.capacity ? filters.capacity.toString() : undefined,
-          features: filters.feature || undefined,
+          energyClass: filters.energyClass ? filters.energyClass.join(',') : undefined,
+          capacity: filters.capacity ? filters.capacity.join(',') : undefined,
+          features: filters.feature ? filters.feature.join(',') : undefined,
           sortBy: filters.sort || undefined,
           order: filters.sort ? 'asc' : undefined,
           page,
@@ -56,10 +55,6 @@ export const Products = () => {
     setPage(1);
   }, [filters, query]);
 
-  if (loading && page === 1) {
-    return <p className="text-center">Loading products...</p>;
-  }
-
   if (error) {
     return <p className="text-center text-red-500">{error}</p>;
   }
@@ -76,22 +71,17 @@ export const Products = () => {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-x-4 gap-y-5">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (
           <ProductCard key={product.code} {...product} />
         ))}
       </div>
       {hasMore && (
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-6">
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <Button
-              variant={'tertiary'}
-              value={'Pokaż więcej'}
-              icon={<ChevronDown />}
-              onClick={handleLoadMore}
-            />
+            <Button variant="primary" onClick={handleLoadMore} value="Pokaż więcej" />
           )}
         </div>
       )}
