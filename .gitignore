@@ -26,7 +26,7 @@ yarn-error.log*
 /.env.production.local
 
 # Ignore any compiled TypeScript or JavaScript files
-*.js
+# *.js
 *.map
 
 # Ignore any dependencies' lock files
